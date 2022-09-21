@@ -1,0 +1,67 @@
+{
+//Github Configurator with JSON via Postman
+//Settings without //Success or //Fail label haven't been tested yet
+
+    //General settings             
+            //Setting
+        "Accept": "application/vnd.github+json",
+            //Name of repository
+        "name": "tutorial-repo", //Success
+            //Description
+        "description": "This is a test-repo, it can be deleted when not needed anymore",//Success
+            //Settings
+        //Set repository settings 
+        "has_wiki": false, //Success
+        "has_issues": false, //Success
+        "allow_forking": false, //Success
+        "allow_sponsorship": false, //Success
+        "has_projects": false, //Success
+        "allow_discussions": false, //Success
+
+        //Pull Requests setting
+        "allow_merge_commit": false, //Success
+        "allow_squash_merge": false, //Success
+        "allow_rebase_merge": true, //Success
+
+        "owner": "aaron-olivieri-loepfe", //Fail or Success?
+        "repo": "tutorial-repo", //Fail or Success?
+        "branch": "main", //Fail or Success?
+        ////"merge-upstream": true, //-> "always suggest updating pull request branches" command -> Fail
+        "allow_auto_merge": true, //Success
+        "delete_branch_on_merge": true, //Success
+
+        //Archives
+        "allow_lfs": false, //Success
+
+    //Collaborators and Teams section
+        //Manage access
+        "org": "loepfe", //Fail or Success?
+        "team_slug": "application software", //Fail or Success?
+        ////-> "add team automatically" command
+
+    //Branches Section
+        //Add default branch to protected branches
+        "branch_protection": "main",
+        "required_pull_request": true,
+        "required_pull_request_reviews": true,
+        //// "dismiss stale pull request approvals when new commits are pushed" command
+
+        //Add pipelines to block premature merging or merging on failure
+        "required_status_checks": true,
+            //Adds the pipelines
+        "contexts": ["WebApi-feature", "WebUi-feature"],
+            //Require conversation resolution before merging
+        "required_conversation_resolution": true,
+        "required_linear_history": true,
+        "include_administrators": true,
+
+    //Actions section
+        //Actions permissions
+        "allowed_actions": false,
+
+    //Autolink References section
+        //Autolink references
+        "key_prefix": "https://loepfe.atlassian.net/browse/",
+        "url_template": "<num>",
+        "is_alphanumeric": true
+}
