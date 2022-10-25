@@ -6,9 +6,10 @@
             //Setting
         "Accept": "application/vnd.github+json",
             //Name of repository
-        "name": "tutorial-repo", //Success
+        "name": "newTestRepo", //Success
             //Description
         "description": "This is a test-repo, it can be deleted when not needed anymore",//Success
+
             //Settings
         //Set repository settings 
         "has_wiki": false, //Success
@@ -31,7 +32,7 @@
         "delete_branch_on_merge": true, //Success
 
         //Archives
-        "allow_lfs": false, //Success
+        "allow_lfs": false, //Success 
 
     //Collaborators and Teams section
         //Manage access
@@ -39,21 +40,43 @@
         "team_slug": "application software", //Fail or Success?
         ////-> "add team automatically" command
 
-    //Branches Section
-        //Add default branch to protected branches
-        "branch_protection": "main",
-        "required_pull_request": true,
-        "required_pull_request_reviews": true,
-        //// "dismiss stale pull request approvals when new commits are pushed" command
 
-        //Add pipelines to block premature merging or merging on failure
-        "required_status_checks": true,
-            //Adds the pipelines
-        "contexts": ["WebApi-feature", "WebUi-feature"],
-            //Require conversation resolution before merging
-        "required_conversation_resolution": true,
-        "required_linear_history": true,
-        "include_administrators": true,
+   
+   
+        "required_status_checks": {
+            "strict": false,
+            "contexts": ["newTestRepo/aaron-olivieri-loepfe/main"]
+        },
+        "enforce_admins": true,
+        "required_pull_request_reviews": {
+            "dismissal_restrictions": {},
+            "dismiss_stale_reviews": true,
+            "require_code_owner_reviews": false,
+            "required_approving_review_count": 1
+        },
+        "restrictions": {
+            "users": ["users"],
+            "teams": ["teams"],
+            "apps": ["apps"]
+        },
+
+
+
+    // //Branches Section
+    //     //Add default branch to protected branches
+    //     "branch_protection": "main",
+    //     "required_pull_request": true,
+    //     "required_pull_request_reviews": true,
+    //     //// "dismiss stale pull request approvals when new commits are pushed" command
+
+    //     //Add pipelines to block premature merging or merging on failure
+    //     "required_status_checks": true,
+    //         //Adds the pipelines
+    //     "contexts": ["WebApi-feature", "WebUi-feature"],
+    //         //Require conversation resolution before merging
+    //     "required_conversation_resolution": true,
+    //     "required_linear_history": true,
+    //     "include_administrators": true,
 
     //Actions section
         //Actions permissions

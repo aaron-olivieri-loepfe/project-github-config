@@ -1,44 +1,177 @@
-﻿
-using System;
-using Octokit;
+﻿using RestSharp;
+using RestSharp.Authenticators;
+using System.Text.Json.Serialization;
 
-
-
-var client = new GitHubClient(new ProductHeaderValue("my-cool-app"));
-
-var tokenAuth = new Credentials("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");
-client.Credentials = tokenAuth;
-
-var listOfRepos = await client.Repository.GetAllForUser("aaron-olivieri-loepfe");
-
-await client.Repository.Delete("aaron-olivieri-loepfe", "newRepo");
-
-await client.Repository.Create(new NewRepository("newRepo"));
-
-var branchProtectionRequiredReviews = new BranchProtectionRequiredReviews[1];
-
-public class NewRepository
+namespace GithubConfigurator
 {
-//Features
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public bool HasWiki = false;
-    public bool HasIssues = false;
-    //forking
-    //sponsorships
-    public bool HasProjects = false;
-    //discussions
-
-//Pull Requests
-    public bool AllowMergeCommit = false;
 
 
+    // ---------- Main class
+    class GithubConfigurator
+    {
+        static void Main(string[] args)
+        {
+            var client = new RestClient("https://github.com/");
+            client.Authenticator = new HttpBasicAuthenticator("username", "password");
 
-    //For Testing:
-    public bool
+            var request = new RestRequest("statuses/home_timeline.json", (Method)DataFormat.Json);
 
+            //var timeline = await client.GetAsync<HomeTimeline>(request, cancellationToken);
+        }
+    }
+
+    class Settings
+    {
+        private static CancellationToken cancellationToken;
+
+        static async Task Main(string[] args)
+        {
+            // ---------- Start authentication
+            var client = new RestClient("https://github.com/");
+            client.Authenticator = new HttpBasicAuthenticator("username", "password");
+
+            var request = new RestRequest("statuses/home_timeline.json", (Method)DataFormat.Json);
+
+            var timeline = await client.GetAsync<HomeTimeline>(request, cancellationToken);
+        }
+    }
+
+    internal class HomeTimeline
+    {
+    }
+
+    //// ---------- Get token
+    //record TokenResponse
+    //{
+    //    [JsonPropertyName("token_type")]
+    //    public string TokenType { get; init; }
+    //    [JsonPropertyName("access_token")]
+    //    public string AccessToken { get; init; }
+    //}
+
+
+    //// ---------- Login
+    //public class TwitterAuthenticator : AuthenticatorBase
+    //{
+    //    readonly string _baseUrl;
+    //    readonly string _clientId;
+    //    readonly string _clientSecret;
+
+    //    public TwitterAuthenticator(string baseUrl, string clientId, string clientSecret) : base("")
+    //    {
+    //        _baseUrl = baseUrl;
+    //        _clientId = clientId;
+    //        _clientSecret = clientSecret;
+    //    }
+
+    //    protected override async ValueTask<Parameter> GetAuthenticationParameter(string accessToken)
+    //    {
+    //        var token = string.IsNullOrEmpty(Token) ? await GetToken() : Token;
+    //        return new HeaderParameter(KnownHeaders.Authorization, token);
+    //    }
+    //}
+
+
+    //// ----------- Initiate Github connection
+    //public class GitHubClient
+    //{
+    //    readonly RestClient _client;
+
+    //    public GitHubClient()
+    //    {
+    //        _client = new RestClient("https://api.github.com/")
+    //            .AddDefaultHeader(KnownHeaders.Accept, "application/vnd.github.v3+json");
+    //    }
+
+    //    public Task<GitHubRepo[]> GetRepos()
+    //        => _client.GetJsonAsync<GitHubRepo[]>("users/aspnet/repos");
+    //}
+
+
+    //public class ExecuteJson
+    //{
+    //    // ----------- Execute JSON file
+    //    var request = new RestRequest("address/update").AddJsonBody(updatedAddress);
+    //    var response = await client.PostAsync<AddressUpdateResponse>(request);
+    //}
 }
-   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//using System;
+//using Octokit;
+
+
+
+//var client = new GitHubClient(new ProductHeaderValue("my-cool-app"));
+
+//var tokenAuth = new Credentials("Set a new Bearer Token");
+//client.Credentials = tokenAuth;
+
+//var listOfRepos = await client.Repository.GetAllForUser("aaron-olivieri-loepfe");
+
+//await client.Repository.Delete("aaron-olivieri-loepfe", "newRepo");
+
+//await client.Repository.Create(new NewRepository("newRepo"));
+
+//var branchProtectionRequiredReviews = new BranchProtectionRequiredReviews[1];
+
+//await client.Repository.e
+
+
+
+
+
+//public class NewRepository
+//{
+////Features
+//    public string Name { get; set; }
+//    public string Description { get; set; }
+//    public bool HasWiki = false;
+//    public bool HasIssues = false;
+//    //forking
+//    //sponsorships
+//    public bool HasProjects = false;
+//    //discussions
+
+////Pull Requests
+//    public bool AllowMergeCommit = false;
+
+
+
+//    //For Testing:
+//    public bool
+
+//}
+
 
 
 
