@@ -1,100 +1,241 @@
-﻿using RestSharp;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using RestSharp;
 using RestSharp.Authenticators;
+using RestSharp.Authenticators.OAuth2;
 using System.Text.Json.Serialization;
 
 namespace GithubConfigurator
 {
-
-
-    // ---------- Main class
-    class GithubConfigurator
-    {
-        static void Main(string[] args)
-        {
-            var client = new RestClient("https://github.com/");
-            client.Authenticator = new HttpBasicAuthenticator("username", "password");
-
-            var request = new RestRequest("statuses/home_timeline.json", (Method)DataFormat.Json);
-
-            //var timeline = await client.GetAsync<HomeTimeline>(request, cancellationToken);
-        }
-    }
-
-    class Settings
+    class Execute
     {
         private static CancellationToken cancellationToken;
 
         static async Task Main(string[] args)
         {
-            // ---------- Start authentication
-            var client = new RestClient("https://github.com/");
-            client.Authenticator = new HttpBasicAuthenticator("username", "password");
+            var bearerToken = "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";
+            //----------Start authentication
+            var url = "https://api.github.com/user/repos";
+            var client = new RestClient(url)
+            {
+                Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(
+                bearerToken,
+                "Bearer"
+            )
+            };
 
-            var request = new RestRequest("statuses/home_timeline.json", (Method)DataFormat.Json);
+            // Create a new repository
+            var request = new RestRequest(url, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            var body = new
+            {
+                Accept = "application/vnd.github+json",
+                name = "newTestRepo",
+                description = "This is a test-repo, it can be deleted when not needed anymore"
+            };
+            var bodyy = JsonConvert.SerializeObject(body);
+            request.AddBody(bodyy, "application/json");
+            RestResponse response = await client.ExecuteAsync(request);
+            var output = response.Content;
 
-            var timeline = await client.GetAsync<HomeTimeline>(request, cancellationToken);
+            // Add a file to the newly created repository HIER WEITER MACHEN
+            _ = new RestRequest(url, Method.Put);
+            _ = new
+            {
+                message = "message",
+                content = "VGhpcyBmaWxlIHdhcyBjcmVhdGVkIHRvIGVuYWJsZSByZXBvc2l0b3J5IHNldHRpbmdzIGNvbnRyb2wgYWZ0ZXIgY3JlYXRpb24="
+            };
+            var bodyyy = JsonConvert.SerializeObject(body);
+            request.AddBody(bodyyy, "application/json");
+            RestResponse response1 = await client.ExecuteAsync(request);         
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //public async Task<IActionResult> IndexAsync()
+        //{
+        //    var url = "https://api.github.com/user/repos";
+        //    var client = new RestClient(url);
+        //    var request = new RestRequest(url, Method.Post);
+        //    request.AddHeader("Content-Type", "application/json");
+        //    var body = new
+        //    {
+        //        Accept = "application/vnd.github+json",
+        //        name = "newTestRepo",
+        //        description = "This is a test-repo, it can be deleted when not needed anymore"
+        //    };
+        //    var bodyy = JsonConvert.SerializeObject(body);
+        //    request.AddBody(bodyy, "application/json");
+        //    RestResponse response = await client.ExecuteAsync(request);
+        //    var output = response.Content;
+        //    return View();
+        //}
+
+        //        private IActionResult View()
+        //        {
+        //            throw new NotImplementedException();
+        //        }
     }
-
-    internal class HomeTimeline
-    {
-    }
-
-    //// ---------- Get token
-    //record TokenResponse
-    //{
-    //    [JsonPropertyName("token_type")]
-    //    public string TokenType { get; init; }
-    //    [JsonPropertyName("access_token")]
-    //    public string AccessToken { get; init; }
-    //}
-
-
-    //// ---------- Login
-    //public class TwitterAuthenticator : AuthenticatorBase
-    //{
-    //    readonly string _baseUrl;
-    //    readonly string _clientId;
-    //    readonly string _clientSecret;
-
-    //    public TwitterAuthenticator(string baseUrl, string clientId, string clientSecret) : base("")
-    //    {
-    //        _baseUrl = baseUrl;
-    //        _clientId = clientId;
-    //        _clientSecret = clientSecret;
-    //    }
-
-    //    protected override async ValueTask<Parameter> GetAuthenticationParameter(string accessToken)
-    //    {
-    //        var token = string.IsNullOrEmpty(Token) ? await GetToken() : Token;
-    //        return new HeaderParameter(KnownHeaders.Authorization, token);
-    //    }
-    //}
-
-
-    //// ----------- Initiate Github connection
-    //public class GitHubClient
-    //{
-    //    readonly RestClient _client;
-
-    //    public GitHubClient()
-    //    {
-    //        _client = new RestClient("https://api.github.com/")
-    //            .AddDefaultHeader(KnownHeaders.Accept, "application/vnd.github.v3+json");
-    //    }
-
-    //    public Task<GitHubRepo[]> GetRepos()
-    //        => _client.GetJsonAsync<GitHubRepo[]>("users/aspnet/repos");
-    //}
-
-
-    //public class ExecuteJson
-    //{
-    //    // ----------- Execute JSON file
-    //    var request = new RestRequest("address/update").AddJsonBody(updatedAddress);
-    //    var response = await client.PostAsync<AddressUpdateResponse>(request);
-    //}
 }
+
+
+
+
+
+
+
+
+
+//namespace GithubConfigurator
+//{
+
+
+//    // ---------- Main class
+//    class GithubConfigurator
+//    {
+//        private static CancellationToken cancellationToken;
+
+//        static async Task Main(string[] args)
+//        {
+//            // ---------- Start authentication
+//            var client = new RestClient("https://api.github.com/");
+//            //client.Authenticator = new HttpBasicAuthenticator("aaron-olivieri-loepfe", "HalloPasswort1");// mit bearer token
+
+//            client.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(
+//                token, "Bearer"
+//            );
+
+//            var request = new RestRequest("githubConfigJSON.json", (Method)DataFormat.Json);
+
+//            var timeline = await client.GetAsync<HomeTimeline>(request, cancellationToken);
+//        }
+
+//        internal class HomeTimeline
+//        {
+//        }
+
+//        // ---------- Get token
+//        record TokenResponse
+//        {
+//            [JsonPropertyName("token_type")]
+//            public string TokenType { get; init; }
+//            [JsonPropertyName("access_token")]
+//            public string AccessToken { get; init; }
+//        }
+
+//    }
+//}
+
+
+
+
+//            var client = new RestClient("https://raw.githubusercontent.com/");
+//            var response = await client.GetJsonAsync<Response>("OurWorldMetaverse/OurOSBasic/main/O_OS-Kernel/ACK/Resources/ACKCommands.json");
+//            Console.WriteLine(response!.Commands["ping"]);
+//        }
+
+//class Commands : Dictionary<string, string> { }
+
+//        class Response
+//        {
+//            public Commands? Commands { get; set; }
+//        }
+//    }
+
+
+
+
+
+
+
+
+
+//// ---------- Login
+//public class TwitterAuthenticator : AuthenticatorBase
+//{
+//    readonly string _baseUrl;
+//    readonly string _clientId;
+//    readonly string _clientSecret;
+
+//    public TwitterAuthenticator(string baseUrl, string clientId, string clientSecret) : base("")
+//    {
+//        _baseUrl = baseUrl;
+//        _clientId = clientId;
+//        _clientSecret = clientSecret;
+//    }
+
+//    protected override async ValueTask<Parameter> GetAuthenticationParameter(string accessToken)
+//    {
+//        var token = string.IsNullOrEmpty(Token) ? await GetToken() : Token;
+//        return new HeaderParameter(KnownHeaders.Authorization, token);
+//    }
+//}
+
+
+//// ----------- Initiate Github connection
+//public class GitHubClient
+//{
+//    readonly RestClient _client;
+
+//    public GitHubClient()
+//    {
+//        _client = new RestClient("https://api.github.com/")
+//            .AddDefaultHeader(KnownHeaders.Accept, "application/vnd.github.v3+json");
+//    }
+
+//    public Task<GitHubRepo[]> GetRepos()
+//        => _client.GetJsonAsync<GitHubRepo[]>("users/aspnet/repos");
+//}
+
+
+//public class ExecuteJson
+//{
+//    // ----------- Execute JSON file
+//    var request = new RestRequest("address/update").AddJsonBody(updatedAddress);
+//    var response = await client.PostAsync<AddressUpdateResponse>(request);
+//}
 
 
 
